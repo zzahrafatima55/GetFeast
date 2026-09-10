@@ -79,7 +79,6 @@ export const sendRegistrationEmails = createServerFn({ method: "POST" })
     } catch (err) {
       console.error("❌ [registration-email] Failed to send email:", err);
     }
-
     const sheetsUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
     console.log("========== SHEETS DEBUG ==========");
     console.log("GOOGLE_SHEETS_WEBHOOK_URL exists:", !!sheetsUrl);
@@ -88,20 +87,46 @@ export const sendRegistrationEmails = createServerFn({ method: "POST" })
     if (sheetsUrl) {
       try {
         console.log("📊 Sending data to Google Sheet...");
-        const response = await fetch(sheetsUrl, {
+
+        const body = JSON.stringify(data);
+        const headers = { "Content-Type": "application/json" };
+
+        let response = await fetch(sheetsUrl, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          headers,
+          body,
+          redirect: "manual",
         });
+
+        if (response.status >= 300 && response.status < 400) {
+          const location = response.headers.get("location");
+          console.log("📊 Following redirect manually to:", location);
+
+          if (location) {
+            response = await fetch(location, {
+              method: "POST",
+              headers,
+              body,
+            });
+          }
+        }
+
         sheetOk = response.ok;
+
         console.log("📊 Sheets response status:", response.status);
+
         const responseText = await response.text();
         console.log("📊 Sheets response body:", responseText);
       } catch (err) {
-        console.error("❌ [registration-email] Failed to log to Google Sheet:", err);
+        console.error(
+          "❌ [registration-email] Failed to log to Google Sheet:",
+          err
+        );
       }
     } else {
-      console.warn("⚠️ GOOGLE_SHEETS_WEBHOOK_URL not set, skipping sheet log");
+      console.warn(
+        "⚠️ GOOGLE_SHEETS_WEBHOOK_URL not set, skipping sheet log"
+      );
     }
 
     return { ok: emailOk, sheetOk };
