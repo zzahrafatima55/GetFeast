@@ -80,8 +80,8 @@ function Invitation() {
   return (
     <div className="min-h-screen bg-background text-foreground">
      <header className="border-b border-border bg-card">
-  <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-3 py-2 sm:gap-3 sm:px-4 sm:py-3 md:gap-4 md:px-6 md:py-4">
-    <GenFeatMark className="h-5 w-auto sm:h-6 md:h-9" />
+ <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-3 py-2 sm:gap-3 sm:px-4 sm:py-3 md:gap-4 md:px-6 md:py-3">
+    <GenFeatMark className="h-5 w-auto sm:h-6 md:h-10" />
     <div className="flex items-center gap-1.5 text-[9px] font-medium uppercase tracking-[0.14em] text-muted-foreground sm:gap-2 sm:text-[10px] sm:tracking-[0.18em] md:gap-3 md:text-xs md:tracking-[0.2em]">
       in collaboration with
       <KlayytechMark className="h-4 w-auto sm:h-5 md:h-7" />
@@ -244,14 +244,14 @@ function Invitation() {
               >
                 Open in Google Maps
               </a>
-              <a
+              {/* <a
                 href={HOTEL_MAP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-muted"
               >
                 Hotel listing
-              </a>
+              </a> */}
             </div>
           </div>
           <img
