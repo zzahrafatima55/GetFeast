@@ -32,10 +32,7 @@ function getTransporter() {
 
   return nodemailer.createTransport({
     service: "gmail",
-    auth: {
-      user,
-      pass,
-    },
+    auth: { user, pass },
   });
 }
 
@@ -43,15 +40,7 @@ export const sendRegistrationEmails = createServerFn({ method: "POST" })
   .validator(inputSchema)
   .handler(async ({ data }) => {
     console.log("🔥 SEND REGISTRATION FUNCTION CALLED");
-    console.log("Registration data:", {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      companyName: data.companyName,
-      position: data.position,
-      email: data.email,
-      mobileNumber: data.mobileNumber,
-      needsShuttle: data.needsShuttle,
-    });
+    console.log("Registration data:", data);
 
     const fullName = `${data.firstName} ${data.lastName}`;
 
@@ -62,14 +51,14 @@ export const sendRegistrationEmails = createServerFn({ method: "POST" })
       <p><strong>Position:</strong> ${data.position}</p>
       <p><strong>Email:</strong> ${data.email}</p>
       <p><strong>Mobile:</strong> ${data.mobileNumber}</p>
-      <p><strong>Needs shuttle:</strong> ${
-        data.needsShuttle ? "Yes" : "No"
-      }</p>
+      <p><strong>Needs shuttle:</strong> ${data.needsShuttle ? "Yes" : "No"}</p>
     `;
+
+    let emailOk = false;
+    let sheetOk = false;
 
     try {
       console.log("📧 Creating Gmail transporter...");
-
       const transporter = getTransporter();
       const user = process.env.GMAIL_USER;
 
@@ -86,17 +75,34 @@ export const sendRegistrationEmails = createServerFn({ method: "POST" })
 
       console.log("✅ EMAIL SENT SUCCESSFULLY");
       console.log("Message ID:", result.messageId);
-
-      return {
-        ok: true,
-        messageId: result.messageId,
-      };
+      emailOk = true;
     } catch (err) {
-      console.error("❌ [registration-email] Failed to send:", err);
-
-      return {
-        ok: false,
-        error: String(err),
-      };
+      console.error("❌ [registration-email] Failed to send email:", err);
     }
+
+    const sheetsUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+    console.log("========== SHEETS DEBUG ==========");
+    console.log("GOOGLE_SHEETS_WEBHOOK_URL exists:", !!sheetsUrl);
+    console.log("===================================");
+
+    if (sheetsUrl) {
+      try {
+        console.log("📊 Sending data to Google Sheet...");
+        const response = await fetch(sheetsUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        sheetOk = response.ok;
+        console.log("📊 Sheets response status:", response.status);
+        const responseText = await response.text();
+        console.log("📊 Sheets response body:", responseText);
+      } catch (err) {
+        console.error("❌ [registration-email] Failed to log to Google Sheet:", err);
+      }
+    } else {
+      console.warn("⚠️ GOOGLE_SHEETS_WEBHOOK_URL not set, skipping sheet log");
+    }
+
+    return { ok: emailOk, sheetOk };
   });
