@@ -78,21 +78,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { title: "Accelerate AI Adoption with Microsoft Copilot & Fabric | GenFeat" },
+{
+  name: "description",
+  content:
+    "Executive invitation: Accelerate AI adoption with Microsoft Copilot & Fabric. 16 September 2026, Radisson Hotel Riyadh Airport.",
+},
+{ name: "author", content: "GenFeat" },
+{ property: "og:title", content: "Accelerate AI Adoption with Microsoft Copilot & Fabric" },
+{
+  property: "og:description",
+  content:
+    "An afternoon-to-evening session for business and technology leaders in Riyadh — keynote perspectives, three live demos, VIP shuttle service and dinner.",
+},
+{ property: "og:type", content: "website" },
+{ name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
