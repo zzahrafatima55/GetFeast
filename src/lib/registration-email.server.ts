@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import nodemailer from "nodemailer";
 
-const NOTIFY_TO = "safiyaanis297@gmail.com";
+const NOTIFY_TO = "yasir@genfeat.com";
 const SENDER_DISPLAY_NAME = "Genfeat Events";
 
 const inputSchema = z.object({
