@@ -112,7 +112,7 @@ function Invitation() {
 
           <dl className="mt-10 grid gap-px overflow-hidden rounded-xl border border-primary-foreground/15 bg-primary-foreground/10 sm:grid-cols-3">
             {[
-              ["Date", "Tuesday, 16 September 2026"],
+              ["Date", "Wednesday, 16 September 2026"],
               ["Time", "16:00 – 20:30 (Riyadh)"],
               ["Venue", "Radisson Hotel Riyadh Airport"],
             ].map(([label, value]) => (
